@@ -31,6 +31,7 @@ struct SearchableDropdownField<Item: Identifiable>: View {
     }
 
     private var filteredItems: [Item] {
+        // If you want you can add local fitering logic here and call the empty closures from outside the view
         items
     }
 
