@@ -390,6 +390,33 @@ struct SearchableDropdownField<Item: Identifiable>: View {
     }
 }
 
+struct DropDownFieldStyle {
+    var fillColor: Color = Color.black
+    var textColor: Color = .white
+    var placeholderColor: Color = Color.white.opacity(0.6)
+    var helperColor: Color = Color.white.opacity(0.45)
+    var errorColor: Color = .red
+    var borderColor: Color = Color.white.opacity(0.1)
+    var focusedBorderColor: Color = .white
+    var invalidBorderColor: Color = .red
+    var titleColor: Color = Color.white.opacity(0.55)
+
+    var cornerRadius: CGFloat = 9
+    var verticalPadding: CGFloat = 0
+    var horizontalPadding: CGFloat = 12
+    var iconSize: CGFloat = 13
+
+    var titleFont: Font = .system(size: 9, weight: .semibold)
+    var inputFont: Font = .system(size: 12, weight: .semibold)
+    var helperFont: Font = .system(size: 11, weight: .medium)
+    var errorFont: Font = .system(size: 11, weight: .medium)
+
+    var fieldHeight: CGFloat = 38
+    var dropdownRowHeight: CGFloat = 34
+    var dropdownMaxVisibleRows: Int = 6
+    var tracking: CGFloat = 0.6
+}
+
 enum ActiveDropdown {
     case none
   // You can add your different dropdown's enum here
