@@ -1,0 +1,107 @@
+
+
+struct CustomDropdown<T: Hashable>: View {
+    
+    let placeholder: String
+    @Binding var selectedText: String
+    let type: ActiveDropdown
+    @Binding var activeDropdown: ActiveDropdown
+    
+    private var isExpanded: Bool {
+        activeDropdown == type
+    }
+    
+    let items: [T]
+    let displayText: (T) -> String
+    let onSelect: (T) -> Void
+
+    var addBorder: Bool = false
+    
+    var body: some View {
+        
+        VStack(alignment: .leading, spacing: 0) {
+            
+            Button {
+                withAnimation {
+                    activeDropdown = isExpanded ? .none : type
+                }
+            } label: {
+                HStack {
+                    Text(selectedText.isEmpty ? placeholder : selectedText)
+                        .foregroundColor(selectedText.isEmpty ? .gray : .black)
+                    
+                    Spacer()
+                    
+                    Image(systemName: "chevron.down")
+                        .rotationEffect(.degrees(isExpanded ? 180 : 0))
+                        .foregroundStyle(Color.black)
+                }
+                .padding(.horizontal)
+                .frame(height: 55)
+                .background(Color.white)
+                .addBorder(addBorder ? Color.primary.opacity(0.4) : .clear, cornerRadius: 8.0)
+                .cornerRadius(8)
+                .contentShape(Rectangle())
+            }
+        }
+        .overlay(alignment: .topLeading) {
+            
+            if isExpanded {
+                
+                Group {
+                    
+                    if items.isEmpty {
+                        
+                        VStack {
+                            Text("No items present")
+                                .foregroundColor(.gray)
+                                .padding()
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 60)
+                        .background(Color.white)
+                        
+                    } else {
+                        
+                        List(items, id: \.self) { item in
+                            
+                            Button {
+                                selectedText = displayText(item)
+                                onSelect(item)
+                                
+                                withAnimation {
+                                    activeDropdown = .none
+                                }
+                                
+                            } label: {
+                                HStack {
+                                    Text(displayText(item))
+                                        .foregroundColor(.black)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    
+                                    if self.selectedText == self.displayText(item) {
+                                        Image(systemName: "checkmark")
+                                            .font(.system(size: 11, weight: .semibold))
+                                            .foregroundColor(.black)
+                                    }
+                                }
+                            }
+                        }
+                        .listStyle(.plain)
+                    }
+                    
+                }
+                .frame(height: min(CGFloat(max(items.count, 1)) * 44, 200))
+                .background(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.gray.opacity(0.4))
+                )
+                .shadow(radius: 4)
+                .offset(y: 60)      // Appears below the field
+                .zIndex(1000)       // Draw above everything else
+            }
+        }
+    }
+}
